@@ -20,7 +20,7 @@ map.on('click', function (e) {
         .setLngLat([e.lngLat.lng, e.lngLat.lat])
         .addTo(map);
         
-        if (points.length < 2){
+        if (points.length < 4){
           points.push(marker);
         } else {
           console.log("not added");
@@ -34,26 +34,33 @@ let nextDestination;
 let home;
 
 const distanceMeasurement = (points) => {
+  shorter = 0;
+  console.log(shorter);
   points.forEach((e) => {
-    console.log('the element is' + e._lngLat.lat);
     var from = turf.point([e._lngLat.lat, e._lngLat.lng]);
 
-    points.forEach((e) => {
+    points.forEach((e, index) => {
       var to = turf.point([e._lngLat.lat, e._lngLat.lng]);
       var options = {units: 'kilometres'};
       var distance = turf.distance(from, to, options);
+      console.log('distance is ' + distance, 'index is ' + index);
+
       if (shorter === 0){
-        shorter = distance;
+        shorter += distance;
         nextDestination = e;
+        console.log('shorter is 0 then add first distance');
         return;
       } else if (shorter > distance){
         shorter = distance;
+        console.log('shorter is longer then distance - correct', + shorter);
         nextDestination = e;
         return;
-      } else if (shorter < distance){
+      } else {
         return;
       }
+      return shorter, nextDestination
     })
+    return shorter, nextDestination
   })
-  return distances, shorter, nextDestination;
+  return console.log(distances, shorter, nextDestination);
 }
