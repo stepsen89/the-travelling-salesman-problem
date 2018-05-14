@@ -32,6 +32,8 @@ map.on('click', function (e) {
 console.log(points);
 
 let distances = [];
+let shortest = [];
+let destinationsORder = [];
 let home;
 
 const distanceMeasurement = (points) => {
