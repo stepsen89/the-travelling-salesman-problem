@@ -28,3 +28,31 @@ map.on('click', function (e) {
           points.forEach((e) => console.log(e._lngLat.lat));
         }
 });
+
+console.log(points);
+
+let distances = [];
+let home;
+
+const distanceMeasurement = (points) => {
+  points.forEach((e) => {
+    console.log('the element is' + e._lngLat.lat);
+    var from = turf.point([e._lngLat.lat, e._lngLat.lng]);
+    points.forEach((e) => {
+      var to = turf.point([e._lngLat.lat, e._lngLat.lng]);
+      var options = {units: 'kilometres'};
+      var distance = turf.distance(from, to, options);
+      console.log(distance);
+      distances.push(distance);
+      console.log(distances);
+    })
+  })
+  return distances;
+}
+
+console.log(distanceMeasurement(points));
+
+
+Punkt A -> B, C, D, E, F, G, H
+
+A Home
