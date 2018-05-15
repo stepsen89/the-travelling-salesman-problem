@@ -20,47 +20,62 @@ map.on('click', function (e) {
         .setLngLat([e.lngLat.lng, e.lngLat.lat])
         .addTo(map);
         
-        if (points.length < 4){
+        if (points.length < 8){
           points.push(marker);
         } else {
           console.log("not added");
         }
 });
 
-let distances = [];
+let alldistances;
 let shorter;
-let destinationsORder = [];
+let destinationsOrder;
 let nextDestination;
 let home;
 
+let distAll;
+
+
 const distanceMeasurement = (points) => {
   shorter = 0;
+  alldistances = [];
+  destinationsOrder = [];
+  nextDestination;
+  distAll = [];
+  
   console.log(shorter);
-  points.forEach((e) => {
+  
+  
+  points.forEach((e, index) => {
     var from = turf.point([e._lngLat.lat, e._lngLat.lng]);
+    console.log(index + ' index');
+    let newDist = [];
+    let distIndex = {};
 
     points.forEach((e, index) => {
       var to = turf.point([e._lngLat.lat, e._lngLat.lng]);
       var options = {units: 'kilometres'};
       var distance = turf.distance(from, to, options);
       console.log('distance is ' + distance, 'index is ' + index);
+      distIndex[index] = distance;
 
-      if (shorter === 0){
-        shorter += distance;
-        nextDestination = e;
-        console.log('shorter is 0 then add first distance');
-        return;
-      } else if (shorter > distance){
-        shorter = distance;
-        console.log('shorter is longer then distance - correct', + shorter);
-        nextDestination = e;
-        return;
-      } else {
-        return;
-      }
-      return shorter, nextDestination
+      // if (shorter === 0 && distance > 0){
+      //   shorter += distance;
+      //   nextDestination = index;
+      //   console.log('s is 0 then add first distance and next destination, new shortest is ' + shorter);
+      // } else if (shorter > distance && distance > 0){
+      //   shorter = distance;
+      //   console.log('s longer then distance - correct', + shorter);
+      //   nextDestination = index;
+      // } 
+      
+      return shorter, nextDestination, destinationsOrder, alldistances;
     })
-    return shorter, nextDestination
+    // destinationsOrder.push(nextDestination);
+    // alldistances.push(shorter);
+    distAll.push(distIndex);
+    return shorter, nextDestination, destinationsOrder, alldistances, distAll;
   })
-  return console.log(distances, shorter, nextDestination);
+  return console.log(alldistances, shorter, nextDestination, destinationsOrder, distAll);
 }
+
