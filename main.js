@@ -70,25 +70,34 @@ const distanceMeasurement = (points) => {
 }
 
 let checkArr;
+let orderPoints;
 
 const findRoute = () => {
-  checkArr = [];
-  console.log(distAll);
-  var obj = {0: 90, 1: 3.3910236712081243, 2: 7.020198887190595, 3: 8.272155894468368}
-  console.log(obj);
-  var arr = Object.values(obj);
-  var min1 = arr.indexOf(Math.min(...arr));
-
-  var route = [];
-
-  route.push(min1);
+  orderPoints = [];
+  checkArr = []; 
 
   distAll.forEach((e) => {
-    return checkArr.push(Object.values(e));
-  });
+    checkArr.push(Object.values(e));
+  })
+
+  console.log(checkArr);
+  // var obj = {0: 90, 1: 3.3910236712081243, 2: 7.020198887190595, 3: 8.272155894468368}
+  // console.log(obj);
+  // var arr = Object.values(obj);
+  // var min1 = arr.indexOf(Math.min(...arr));
+
+  // var route = [];
+
+  // route.push(min1);
+
+  // distAll.forEach((e) => {
+  //   return checkArr.push(Object.values(e));
+  // });
 
   console.log(checkArr);
 
 
 }
+
+
 
