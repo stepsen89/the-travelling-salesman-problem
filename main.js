@@ -2,7 +2,6 @@
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlcHNlbjg5IiwiYSI6ImNqaDZxb3Z1bDAwNGsycW11dnAwZ3N1ZXQifQ.LOs9yadH4E1wF_NcE_3Awg';
 
-// load map
 let map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
@@ -14,46 +13,46 @@ let points = [];
 
 // get points on map by click
 map.on('click', function (e) {
+    
+    //create new marker
     let marker = new mapboxgl.Marker()
     .setLngLat([e.lngLat.lng, e.lngLat.lat])
     .addTo(map);
     
-    // add up to 8 different points in points array, [0] is home point
-    while(points.lenght <= 9){
+    // add up to 8 different points, first is home point
+    if (points.length <= 8){
         points.push(marker);
     }
 });
 
-// declaration of variables in global scope
 let alldistances;
 let destinationsOrder;
 let nextDestination;
 let distAll;
 
-// function for distance between each points
-const distanceBetween = (points) => {
-  alldistances = [];
+const distanceMeasurement = (points) => {
   destinationsOrder = [];
   nextDestination;
   distAll = [];
   
-  // first loop through array to get starting point (adding turf "from")
+  // measure distance between points
   points.forEach((e, index) => {
     let from = turf.point([e._lngLat.lat, e._lngLat.lng]);
+    let newDist = [];
     let distIndex = {};
 
-    // second loop to get end point (adding turf "to")
+    // to get distance to each point (turf: to - end point)
     points.forEach((e, index) => {
       let to = turf.point([e._lngLat.lat, e._lngLat.lng]);
+      let options = {units: 'kilometres'};
       let distance = turf.distance(from, to, options);
-
-      //store each end point (distance) and point (index)
       distIndex[index] = distance;
       
-      return destinationsOrder, alldistances;
+      return
     })
     distAll.push(distIndex);
-    return destinationsOrder, alldistances, distAll;
+
+    return
   })
   return
 }
@@ -61,33 +60,32 @@ const distanceBetween = (points) => {
 let checkArr;
 let orderPoints;
 
-//to sort the indeces of points (distance low to high)
-function sortWithIndeces(toSort) {
-  for (let i = 0; i < toSort.length; i++) {
-    toSort[i] = [toSort[i], i];
+// to sort distances/indeces in array
+const sortWithIndeces = (arr) => {
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = [arr[i], i];
   }
-  toSort.sort(function(left, right) {
+  arr.sort(function(left, right) {
     return left[0] < right[0] ? -1 : 1;
   });
 
-  toSort.sortIndices = [];
-  for (let j = 0; j < toSort.length; j++) {
-    toSort.sortIndices.push(toSort[j][1]);
-    toSort[j] = toSort[j][0];
+  arr.sortIndices = [];
+  for (let j = 0; j < arr.length; j++) {
+    arr.sortIndices.push(arr[j][1]);
+    arr[j] = arr[j][0];
   }
-  return toSort;
+  return arr;
 }
-let test; 
 
 const findRoute = () => {
   orderPoints = [];
-  checkArr = = [];
+  checkArr = []; 
   
   distAll.forEach((e) => {
     return checkArr.push(Object.values(e));
   });
   
-  test = checkArr.slice(0).forEach((e) => {
+  checkArr.slice(0).forEach((e) => {
     sortWithIndeces(e);
   })
 
@@ -96,8 +94,8 @@ const findRoute = () => {
   alldistances = []
   alldistances.push(checkArr[0][1]);
 
-  for (var i = 0; i < checkArr.length; i++){
-    for (var j = 1; j < checkArr[i].sortIndices.length; j++){
+  for (let i = 0; i < checkArr.length; i++){
+    for (let j = 1; j < checkArr[i].sortIndices.length; j++){
       if (orderPoints.indexOf(checkArr[i].sortIndices[j]) === -1 && j < checkArr[i].sortIndices.length - 1 && checkArr[i].sortIndices[j] !== 0){
         orderPoints.push(checkArr[i].sortIndices[j]);
         alldistances.push(checkArr[i][j]);
@@ -106,19 +104,15 @@ const findRoute = () => {
     }
   } 
   orderPoints.push(0);
-  
-    
+}
 
-  function testing (obj, test){
-    if ( test in obj){
-    return obj[test];
-    } else {
-    return 'no';
-    }
-  }
+let total;
 
+const shortestRoute = () => {
+    total = 0;
 
-  
-  console.log(orderPoints);
-
+    for (let i = 0; i < orderPoints.length - 1; i++){
+            total = total + distAll[orderPoints[i]][orderPoints[i+1]];
+            console.log(total);
+        }
 }
