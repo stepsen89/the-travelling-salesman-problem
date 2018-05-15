@@ -71,16 +71,78 @@ const distanceMeasurement = (points) => {
 
 let checkArr;
 let orderPoints;
+let indiz;
+
+function sortWithIndeces(toSort) {
+  for (var i = 0; i < toSort.length; i++) {
+    toSort[i] = [toSort[i], i];
+  }
+  toSort.sort(function(left, right) {
+    return left[0] < right[0] ? -1 : 1;
+  });
+  toSort.sortIndices = [];
+  for (var j = 0; j < toSort.length; j++) {
+    toSort.sortIndices.push(toSort[j][1]);
+    toSort[j] = toSort[j][0];
+  }
+  return toSort;
+}
+var test; 
 
 const findRoute = () => {
   orderPoints = [];
   checkArr = []; 
+  indiz = [];
+  
+  test = checkArr.slice(0);
+  console.log("test" + test);
+
 
   distAll.forEach((e) => {
-    checkArr.push(Object.values(e));
+    return checkArr.push(Object.values(e));
+  });
+
+  checkArr.forEach((e) => {
+    sortWithIndeces(e);
   })
 
   console.log(checkArr);
+
+    // function sortWithIndeces(toSort) {
+    //   for (var i = 0; i < toSort.length; i++) {
+    //     toSort[i] = [toSort[i], i];
+    //   }
+    //   toSort.sort(function(left, right) {
+    //     return left[0] < right[0] ? -1 : 1;
+    //   });
+    //   toSort.sortIndices = [];
+    //   for (var j = 0; j < toSort.length; j++) {
+    //     toSort.sortIndices.push(toSort[j][1]);
+    //     toSort[j] = toSort[j][0];
+    //   }
+    //   return toSort;
+    // }
+    
+    // var test = ['b', 'c', 'd', 'a'];
+    // sortWithIndeces(test);
+    // alert(test.sortIndices.join(","));
+    // var nextPoint = checkArr[1].indexOf(Math.min(...checkArr[1]));
+
+  
+
+  // var months = ['March', 'Jan', 'Feb', 'Dec'];
+  //   months.sort();
+  //   console.log(months);
+    // expected output: Array ["Dec", "Feb", "Jan", "March"]
+
+    // var indices = test.sortIndices();
+    // var array1 = [1, 30, 4, 21];
+    // array1.sort();
+    // console.log(array1);
+// expected output: Array [1, 21, 30, 4]
+
+  // console.log(nextPoint);
+
   // var obj = {0: 90, 1: 3.3910236712081243, 2: 7.020198887190595, 3: 8.272155894468368}
   // console.log(obj);
   // var arr = Object.values(obj);
@@ -90,14 +152,23 @@ const findRoute = () => {
 
   // route.push(min1);
 
-  // distAll.forEach((e) => {
-  //   return checkArr.push(Object.values(e));
-  // });
-
-  console.log(checkArr);
-
-
 }
+
+// sort each array inside the checkArr
+// function sortWithIndeces(toSort) {
+//   for (var i = 0; i < toSort.length; i++) {
+//     toSort[i] = [toSort[i], i];
+//   }
+//   toSort.sort(function(left, right) {
+//     return left[0] < right[0] ? -1 : 1;
+//   });
+//   toSort.sortIndices = [];
+//   for (var j = 0; j < toSort.length; j++) {
+//     toSort.sortIndices.push(toSort[j][1]);
+//     toSort[j] = toSort[j][0];
+//   }
+//   return toSort;
+// }
 
 
 
