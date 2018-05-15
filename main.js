@@ -80,6 +80,7 @@ function sortWithIndeces(toSort) {
   toSort.sort(function(left, right) {
     return left[0] < right[0] ? -1 : 1;
   });
+
   toSort.sortIndices = [];
   for (var j = 0; j < toSort.length; j++) {
     toSort.sortIndices.push(toSort[j][1]);
@@ -94,81 +95,134 @@ const findRoute = () => {
   checkArr = []; 
   indiz = [];
   
-  test = checkArr.slice(0);
-  console.log("test" + test);
-
-
   distAll.forEach((e) => {
     return checkArr.push(Object.values(e));
   });
-
-  checkArr.forEach((e) => {
+  
+  test = checkArr.slice(0).forEach((e) => {
     sortWithIndeces(e);
   })
 
-  console.log(checkArr);
+  nextDestination = checkArr[0].sortIndices[1];
+  orderPoints.push(nextDestination);
+  alldistances = []
+  alldistances.push(checkArr[0][1]);
 
-    // function sortWithIndeces(toSort) {
-    //   for (var i = 0; i < toSort.length; i++) {
-    //     toSort[i] = [toSort[i], i];
-    //   }
-    //   toSort.sort(function(left, right) {
-    //     return left[0] < right[0] ? -1 : 1;
-    //   });
-    //   toSort.sortIndices = [];
-    //   for (var j = 0; j < toSort.length; j++) {
-    //     toSort.sortIndices.push(toSort[j][1]);
-    //     toSort[j] = toSort[j][0];
-    //   }
-    //   return toSort;
-    // }
+  for (var i = 0; i < checkArr.length; i++){
+    for (var j = 1; j < checkArr[i].sortIndices.length; j++){
+      if (orderPoints.indexOf(checkArr[i].sortIndices[j]) === -1 && j < checkArr[i].sortIndices.length - 1 && checkArr[i].sortIndices[j] !== 0){
+        orderPoints.push(checkArr[i].sortIndices[j]);
+        alldistances.push(checkArr[i][j]);
+        break;
+      } 
+    }
+  } 
+  orderPoints.push(0);
+  
     
-    // var test = ['b', 'c', 'd', 'a'];
-    // sortWithIndeces(test);
-    // alert(test.sortIndices.join(","));
-    // var nextPoint = checkArr[1].indexOf(Math.min(...checkArr[1]));
+
+  function testing (obj, test){
+    if ( test in obj){
+    return obj[test];
+    } else {
+    return 'no';
+    }
+  }
+
 
   
-
-  // var months = ['March', 'Jan', 'Feb', 'Dec'];
-  //   months.sort();
-  //   console.log(months);
-    // expected output: Array ["Dec", "Feb", "Jan", "March"]
-
-    // var indices = test.sortIndices();
-    // var array1 = [1, 30, 4, 21];
-    // array1.sort();
-    // console.log(array1);
-// expected output: Array [1, 21, 30, 4]
-
-  // console.log(nextPoint);
-
-  // var obj = {0: 90, 1: 3.3910236712081243, 2: 7.020198887190595, 3: 8.272155894468368}
-  // console.log(obj);
-  // var arr = Object.values(obj);
-  // var min1 = arr.indexOf(Math.min(...arr));
-
-  // var route = [];
-
-  // route.push(min1);
+  console.log(orderPoints);
 
 }
 
-// sort each array inside the checkArr
-// function sortWithIndeces(toSort) {
-//   for (var i = 0; i < toSort.length; i++) {
-//     toSort[i] = [toSort[i], i];
-//   }
-//   toSort.sort(function(left, right) {
-//     return left[0] < right[0] ? -1 : 1;
-//   });
-//   toSort.sortIndices = [];
-//   for (var j = 0; j < toSort.length; j++) {
-//     toSort.sortIndices.push(toSort[j][1]);
-//     toSort[j] = toSort[j][0];
-//   }
-//   return toSort;
-// }
+var geojson = {
+    "type": "FeatureCollection",
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": [
+                [0, 0]
+            ]
+        }
+    }]
+};
 
+var speedFactor = 50;
+var animation;
+var startTime = 0;
+var progress = 0;
+var resetTime = false;
+var pauseButton = document.getElementById('pause');
+
+map.on('load', function() {
+
+    // add the line which will be modified in the animation
+    map.addLayer({
+        'id': 'line-animation',
+        'type': 'line',
+        'source': {
+            'type': 'geojson',
+            'data': geojson
+        },
+        'layout': {
+            'line-cap': 'round',
+            'line-join': 'round'
+        },
+        'paint': {
+            'line-color': '#000000',
+            'line-width': 3,
+            'line-opacity': 1
+        }
+    });
+
+    startTime = performance.now();
+
+    animateLine();
+
+    // click the button to pause or play
+    pauseButton.addEventListener('click', function() {
+        pauseButton.classList.toggle('pause');
+        if (pauseButton.classList.contains('pause')) {
+            cancelAnimationFrame(animation);
+        } else {
+            resetTime = true;
+            animateLine();
+        }
+    });
+
+    // reset startTime and progress once the tab loses or gains focus
+    // requestAnimationFrame also pauses on hidden tabs by default
+    document.addEventListener('visibilitychange', function() {
+        resetTime = true;
+    });
+
+    // animated in a circle as a sine wave along the map.
+    function animateLine(timestamp) {
+        if (resetTime) {
+            // resume previous progress
+            startTime = performance.now() - progress;
+            resetTime = false;
+        } else {
+            progress = timestamp - startTime;
+        }
+
+        // restart if it finishes a loop
+        if (progress > speedFactor * 360) {
+            startTime = timestamp;
+            geojson.features[0].geometry.coordinates = [];
+        } else {
+            var x = progress / speedFactor;
+            // draw a sine wave with some math.
+            var y = Math.sin(x * Math.PI / 90) * 40;
+            // append new coordinates to the lineString
+            geojson.features[0].geometry.coordinates.push([x, y]);
+            // then update the map
+            map.getSource('line-animation').setData(geojson);
+        }
+        // Request the next frame of the animation.
+        animation = requestAnimationFrame(animateLine);
+    }
+});
 
 

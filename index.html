@@ -12,8 +12,29 @@
 </head>
 <body>
     <div id='map'></div>
-    <pre visibility="hidden" id='info'></pre>
-  <script src="main.js"></script>
+    <pre display="none" id='info'></pre>
+    <!-- <button id='pause'></button>
+  <script src="main.js"></script> -->
+
+
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoic3RlcHNlbjg5IiwiYSI6ImNqaDZxb3Z1bDAwNGsycW11dnAwZ3N1ZXQifQ.LOs9yadH4E1wF_NcE_3Awg';
+var map = L.mapbox.map('map', 'examples.map-zr0njcqy');
+
+map.featureLayer.on('ready', function(e) {
+  var line = [];
+
+  this.eachLayer(function(marker) {
+    line.push(marker.getLatLng());
+  });
+
+  var polyline_options = {
+    color: '#000'
+  };
+
+  var polyline = L.polyline(line, polyline_options).addTo(map);
+});
+</script>
 </body>
 </html>
 
