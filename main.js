@@ -28,23 +28,26 @@ map.on('click', function (e) {
 let alldistances;
 let destinationsOrder;
 let nextDestination;
-let home;
 let distAll;
 
-const distanceMeasurement = (points) => {
+// function for distance between each points
+const distanceBetween = (points) => {
   alldistances = [];
   destinationsOrder = [];
   nextDestination;
   distAll = [];
   
+  // first loop through array to get starting point (adding turf "from")
   points.forEach((e, index) => {
     let from = turf.point([e._lngLat.lat, e._lngLat.lng]);
-    let newDist = [];
     let distIndex = {};
 
+    // second loop to get end point (adding turf "to")
     points.forEach((e, index) => {
       let to = turf.point([e._lngLat.lat, e._lngLat.lng]);
       let distance = turf.distance(from, to, options);
+
+      //store each end point (distance) and point (index)
       distIndex[index] = distance;
       
       return destinationsOrder, alldistances;
@@ -52,12 +55,13 @@ const distanceMeasurement = (points) => {
     distAll.push(distIndex);
     return destinationsOrder, alldistances, distAll;
   })
-  return console.log(alldistances, destinationsOrder, distAll);
+  return
 }
 
 let checkArr;
 let orderPoints;
 
+//to sort the indeces of points (distance low to high)
 function sortWithIndeces(toSort) {
   for (let i = 0; i < toSort.length; i++) {
     toSort[i] = [toSort[i], i];
