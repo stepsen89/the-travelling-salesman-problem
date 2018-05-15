@@ -58,16 +58,6 @@ const distanceMeasurement = (points) => {
       var distance = turf.distance(from, to, options);
       console.log('distance is ' + distance, 'index is ' + index);
       distIndex[index] = distance;
-
-      // if (shorter === 0 && distance > 0){
-      //   shorter += distance;
-      //   nextDestination = index;
-      //   console.log('s is 0 then add first distance and next destination, new shortest is ' + shorter);
-      // } else if (shorter > distance && distance > 0){
-      //   shorter = distance;
-      //   console.log('s longer then distance - correct', + shorter);
-      //   nextDestination = index;
-      // } 
       
       return shorter, nextDestination, destinationsOrder, alldistances;
     })
@@ -79,7 +69,10 @@ const distanceMeasurement = (points) => {
   return console.log(alldistances, shorter, nextDestination, destinationsOrder, distAll);
 }
 
+let checkArr;
+
 const findRoute = () => {
+  checkArr = [];
   console.log(distAll);
   var obj = {0: 90, 1: 3.3910236712081243, 2: 7.020198887190595, 3: 8.272155894468368}
   console.log(obj);
@@ -89,5 +82,13 @@ const findRoute = () => {
   var route = [];
 
   route.push(min1);
+
+  distAll.forEach((e) => {
+    return checkArr.push(Object.values(e));
+  });
+
+  console.log(checkArr);
+
+
 }
 
