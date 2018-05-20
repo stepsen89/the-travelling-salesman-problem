@@ -14,28 +14,23 @@ let map = new mapboxgl.Map({
 let points = [];
 
 // get points on map by click
-map.on('click', function (e) {
-    //create new marker
-    let marker = new mapboxgl.Marker()
-    .setLngLat([e.lngLat.lng, e.lngLat.lat])
-    .addTo(map);
+map.on('click', function (el) {
+    
+  //create new marker with lat, lng
+  let marker = new mapboxgl.Marker()
+  .setLngLat([el.lngLat.lng, el.lngLat.lat])
+  .addTo(map);
 
-    if (points.length <= 8){
-        points.push(marker);
-    }
+  // up to 8 points 
+  if (points.length <= 8){
+      points.push(marker);
+  }
 });
 
-
-// set home
-let home = points[0];
-
 let alldistances;
-let destinationsOrder;
-let nextDestination;
 let distAll;
 
 const distanceMeasurement = (points) => {
-  destinationsOrder = [];
   distAll = [];
   
   // measure distance between points (turf: from point)
@@ -92,58 +87,57 @@ const findRoute = () => {
     return checkArr.push(Object.values(e));
   });
   
-  checkArr.slice(0).forEach((e) => {
-    sortWithIndeces(e);
-  })
+  // checkArr.slice(0).forEach((e) => {
+  //   sortWithIndeces(e);
+  // })
 
-  nextDestination = checkArr[0].sortIndices[1];
-  orderPoints.push(nextDestination);
-  alldistances = []
-  alldistances.push(checkArr[0][1]);
+  orderPoints.push(checkArr[0].sortIndices[1]);
 
   for (let i = 0; i < checkArr.length; i++){
     for (let j = 1; j < checkArr[i].sortIndices.length; j++){
       if (orderPoints.indexOf(checkArr[i].sortIndices[j]) === -1 && j < checkArr[i].sortIndices.length - 1 && checkArr[i].sortIndices[j] !== 0){
         orderPoints.push(checkArr[i].sortIndices[j]);
-        alldistances.push(checkArr[i][j]);
         break;
       } 
     }
   } 
+  // endpoint: home
   orderPoints.push(0);
 }
 
+
 let total;
 let travellingRoute;
-// //distAll = distanzen zwischen den einzelnen Punkten also von 0 auf 0 - max length
-// //orderpoints is die Reihenfolge der kürzesten Distanzen also 0, 4, 3, 2, 1 
 
+//finding the shortest route (kilometres and travellingRoute)
 const shortestRoute = () => {
     travellingRoute = [];
     total = distAll[0][orderPoints[0]];
-    // set beginning route 
+
+    // set beginning route (home to next points) 
     travellingRoute.push(points[0]);
-    for (let i = 0; i < orderPoints.length; i++){
+    for (let i = 0; i < orderPoints.length -1; i++){
             total = total + distAll[orderPoints[i]][orderPoints[i+1]];
             travellingRoute.push(points[orderPoints[i]]);
             console.log(total);
         }
+    
+    // set end point (last point to home point);
+    travellingRoute.push(points[0]);
     // return total;
     return total, travellingRoute;
-
 }
 
+// displaying the shortest route with lines between (button)
 const onClick = () => {
-  var coord = [];
+  let coord = [];
 
   travellingRoute.forEach((point) => {
     coord.push([point._lngLat.lng, point._lngLat.lat]);
   });
 
-  // orderpoints hat alle in der reihenfolge wie ich sie brauche
-  // points aber alle von 0 bis x
-
-  var geojson = {
+  // create geojson object for lines between points (coordinates)
+  let geojson = {
       "type": "FeatureCollection",
       "features": [{
           "type": "Feature",
@@ -167,20 +161,8 @@ const onClick = () => {
         "line-cap": "round"
     },
     "paint": {
-        "line-color": "#BF93E4",
-        "line-width": 5
+        "line-color": "#000000",
+        "line-width": 4
     }
-});
-
-    var coordinates = geojson.features[0].geometry.coordinates;
-    var bounds = coordinates.reduce(function(bounds, coord) {
-        return bounds.extend(coord);
-    }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
-
-    map.fitBounds(bounds, {
-        padding: 20
-    });
-
-  console.log(geojson);
-
+  });
 }
