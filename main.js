@@ -27,11 +27,11 @@ map.on('click', function (el) {
   }
 });
 
-let alldistances;
-let distAll;
+// for all distances between all points (to check shortest)
+let allDistances;
 
 const distanceMeasurement = (points) => {
-  distAll = [];
+  allDistances = [];
   
   // measure distance between points (turf: from point)
   points.forEach((e, index) => {
@@ -52,13 +52,14 @@ const distanceMeasurement = (points) => {
       
       return
     })
-    distAll.push(distIndex);
+    allDistances.push(distIndex);
 
     return
   })
   return
 }
 
+// checkArr = store distances in order, including sortIndices (to find closest neighbor)
 let checkArr;
 let orderPoints;
 
@@ -83,13 +84,14 @@ const findRoute = () => {
   orderPoints = [];
   checkArr = []; 
   
-  distAll.forEach((e) => {
+  allDistances.forEach((e) => {
     return checkArr.push(Object.values(e));
   });
   
-  // checkArr.slice(0).forEach((e) => {
-  //   sortWithIndeces(e);
-  // })
+  // create sorted indeces array in checkArr
+  checkArr.slice(0).forEach((e) => {
+    sortWithIndeces(e);
+  })
 
   orderPoints.push(checkArr[0].sortIndices[1]);
 
@@ -112,12 +114,12 @@ let travellingRoute;
 //finding the shortest route (kilometres and travellingRoute)
 const shortestRoute = () => {
     travellingRoute = [];
-    total = distAll[0][orderPoints[0]];
+    total = allDistances[0][orderPoints[0]];
 
     // set beginning route (home to next points) 
     travellingRoute.push(points[0]);
     for (let i = 0; i < orderPoints.length -1; i++){
-            total = total + distAll[orderPoints[i]][orderPoints[i+1]];
+            total = total + allDistances[orderPoints[i]][orderPoints[i+1]];
             travellingRoute.push(points[orderPoints[i]]);
             console.log(total);
         }
