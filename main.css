@@ -1,10 +1,30 @@
-body { margin:0; padding:0; }
+body, html { 
+  margin:0; 
+  padding:0; 
+  height: 100%}
 
-#map { position:absolute; left: 25%; width:50%; height:50% }
+#map { 
+  position:absolute; 
+  left: 15%; 
+  width: 70%; 
+  height: 70%;
+  border: 2px solid black }
 
-button {
+.btn {
   color: black;
   padding: 20px;
+}
+
+.header {
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+  color: #016d7b;
+  text-transform: uppercase;
+  font-size: 30px;
+  letter-spacing: 2px;
 }
 
 .distance-container {

@@ -1,4 +1,4 @@
-// 'use strict'
+'use strict'
 
 // create mapbox gl map
 mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlcHNlbjg5IiwiYSI6ImNqaDZxb3Z1bDAwNGsycW11dnAwZ3N1ZXQifQ.LOs9yadH4E1wF_NcE_3Awg';
@@ -6,7 +6,7 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlcHNlbjg5IiwiYSI6ImNqaDZxb3Z1bDAwNGsycW11d
 let map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
-    center: [43, 11],
+    center: [- 0.104790, 51.524038],
     zoom: 9
 });
 
@@ -27,16 +27,17 @@ map.on('click', function (el) {
   }
 });
 
-// for all distances between all points (to check shortest)
+// array for all distances between all points (to check shortest)
 let allDistances;
 
+// to measure distance between all points
 const distanceMeasurement = (points) => {
   allDistances = [];
   
   // measure distance between points (turf: from point)
   points.forEach((e, index) => {
     let from = turf.point([e._lngLat.lat, e._lngLat.lng]);
-    let newDist = [];
+    // for each point - distance to every point
     let distIndex = {};
 
     // to get distance to each point (turf: to - end point)
@@ -46,12 +47,13 @@ const distanceMeasurement = (points) => {
       // options: kilometres
       let options = {units: 'kilometres'};
 
-      // define distance
+      // define distance and store it in array with index
       let distance = turf.distance(from, to, options);
       distIndex[index] = distance;
       
       return
     })
+    // store every distIndex
     allDistances.push(distIndex);
 
     return
@@ -132,6 +134,11 @@ const shortestRoute = () => {
 
 // displaying the shortest route with lines between (button)
 const onClick = () => {
+  distanceMeasurement(points);
+  findRoute(allDistances);
+  shortestRoute(orderPoints);
+
+
   let coord = [];
 
   travellingRoute.forEach((point) => {
