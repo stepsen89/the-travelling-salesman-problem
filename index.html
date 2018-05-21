@@ -15,13 +15,26 @@
   <title>Nominet Coding Challenge</title>
 </head>
 <body>
-  <section class="header">
-    <header class="header__headline"> Travelling Salesman Problem </header>
-  </section>
-  <button onClick="onClick()" class="btn"> Click to see shortest route </button>
-  <div id='map'></div>
-  <div id='distance' class='distance-container'></div>
-  <pre visibility="hidden" id='info'></pre>
+  <div class="container">
+    <section class="header">
+      <header class="header__headline"> Travelling Salesman Problem </header>
+    </section>
+    <section class="map">
+        <div id='map'></div>
+        <div id='distance' class='distance-container'></div>
+    </section>
+    <section class="user__interaction">
+      <div class="map__description">
+        <ul class="instructions"> Instructions:
+          <li class="instr__bulletpoints"> Choose Your Home (1st click) </li>
+          <li class="instr__bulletpoints"> Choose up to 7 other points </li>
+          <li class="instr__bulletpoints"> Click "Calculate Route" </li>
+        </ul>
+      </div>
+      <button onClick="onClick()" class="btn"> Click to see shortest route </button>
+      <h2 class="interaction__headline"> Your shortest route: </h2>
+    </section>
+  </div>
 
   <script src="main.js"></script>
 

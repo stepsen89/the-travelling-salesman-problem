@@ -3,12 +3,24 @@ body, html {
   padding:0; 
   height: 100%}
 
+.container {
+  display: grid;
+  grid-template-rows: 8% 75% 17%;
+  height: 100vh;
+}
+
 #map { 
+  margin: 5px;
   position:absolute; 
   left: 15%; 
   width: 70%; 
   height: 70%;
   border: 2px solid black }
+
+  .mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
 
 .btn {
   color: black;
@@ -16,7 +28,6 @@ body, html {
 }
 
 .header {
-  height: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,20 +38,8 @@ body, html {
   letter-spacing: 2px;
 }
 
-.distance-container {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 1;
-}
-
-.distance-container > * {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  font-size: 11px;
-  line-height: 18px;
-  display: block;
-  margin: 0;
-  padding: 5px 10px;
-  border-radius: 3px;
+.user__interaction {
+    justify-content: center;
+    align-items: center;
+    display: flex;
 }

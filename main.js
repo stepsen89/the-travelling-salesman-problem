@@ -15,7 +15,7 @@ let points = [];
 
 // get points on map by click
 map.on('click', function (el) {
-    
+
   //create new marker with lat, lng
   let marker = new mapboxgl.Marker()
   .setLngLat([el.lngLat.lng, el.lngLat.lat])
@@ -26,6 +26,7 @@ map.on('click', function (el) {
       points.push(marker);
   }
 });
+
 
 // array for all distances between all points (to check shortest)
 let allDistances;
@@ -113,7 +114,7 @@ const findRoute = () => {
 let total;
 let travellingRoute;
 
-//finding the shortest route (kilometres and travellingRoute)
+//finding the shortest route (kilometres and create travellingRoute)
 const shortestRoute = () => {
     travellingRoute = [];
     total = allDistances[0][orderPoints[0]];
