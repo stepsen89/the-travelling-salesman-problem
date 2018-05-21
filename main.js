@@ -139,7 +139,6 @@ const onClick = () => {
   findRoute(allDistances);
   shortestRoute(orderPoints);
 
-
   let coord = [];
 
   travellingRoute.forEach((point) => {
@@ -175,4 +174,16 @@ const onClick = () => {
         "line-width": 4
     }
   });
+
+  let resultRoute = document.querySelector("#result");
+
+  
+  let totalRoute = document.createElement("p");
+  totalRoute.innerText = total.toFixed(2) + " kilometres";
+  resultRoute.appendChild(totalRoute);
+
+  let route = document.createElement("p");
+  route.innerText = "0," + orderPoints;
+  totalRoute.appendChild(route);
+
 }

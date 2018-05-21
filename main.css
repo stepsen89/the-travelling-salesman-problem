@@ -5,7 +5,7 @@ body, html {
 
 .container {
   display: grid;
-  grid-template-rows: 8% 75% 17%;
+  grid-template-rows: 8% 65% 27%;
   height: 100vh;
 }
 
@@ -14,32 +14,49 @@ body, html {
   position:absolute; 
   left: 15%; 
   width: 70%; 
-  height: 70%;
-  border: 2px solid black }
-
-  .mapboxgl-popup {
-    max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  height: 60%;
+  border: 3px solid black
 }
 
-.btn {
-  color: black;
-  padding: 20px;
-}
 
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: grey;
-  color: #016d7b;
+  background-color: #016d7b;
+  color: white;
   text-transform: uppercase;
   font-size: 30px;
   letter-spacing: 2px;
 }
 
+.btn {
+  color: black;
+  background-color: #016d7b;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.btn__container {
+  width: 80vw;
+  grid-area: 1/1;
+  text-align: center;
+}
+
+.map__description {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
 .user__interaction {
+    display: grid;
+    grid-template-rows: 15% 85%;
     justify-content: center;
-    align-items: center;
-    display: flex;
 }
